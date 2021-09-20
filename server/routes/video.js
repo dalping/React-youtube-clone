@@ -39,40 +39,41 @@ router.post("/uploadfiles", (req, res) => {
 });
 
 router.post("/thumbnail", (req, res) => {
-
-    let filePath ="";
+    
+    console.log('왜11 안돼 500에러가 뭔데 나한테 이렇게 스트레스를 줘');
+    
+    let thumbsFilePath ="";
     let fileDuration ="";
-    //비디오 정보 가져오기
-    //ffmpeg.setFfmpegPath('C:\Users\kbk\Desktop\ffmpeg\ffmpeg\bin\ffmpeg.exe');
-    ffmpeg.ffprobe(req.body.url, function(err, metadata){
-        console.dir(metadata); //all metadata
-        console.log(metadata.format.duration);
-        fileDuration = metadata.format.duration;
-    });
 
-    ffmpeg(req.body.url)
-        .on('filenames', function (filenames) { //썸네일의 파일네임 생성
+    console.log(req.body.filePath);
+
+    ffmpeg.ffprobe(req.body.filePath, function(err, metadata){
+        console.dir(metadata);
+        console.log(metadata.format.duration);
+
+        fileDuration = metadata.format.duration;
+    })
+
+
+    ffmpeg(req.body.filePath)
+        .on('filenames', function (filenames) {
             console.log('Will generate ' + filenames.join(', '))
-            console.log(filenames)
-            
-            filePath = "uploads/thumbnails/" + filenames[0];
+            thumbsFilePath = "uploads/thumbnails/" + filenames[0];
         })
-        .on('end', function () { //썸네일 생성 후 무엇을 할것인지?
+        .on('end', function () {
             console.log('Screenshots taken');
-            return res.json({ success: true, url: filePath, fileName:filenames, fileDuration: fileDuration})
+            return res.json({ success: true, thumbsFilePath: thumbsFilePath, fileDuration: fileDuration})
         })
-        .on('error',function(err){ //에러 발생 시
-            console.error(err);
-            return res.json({success: false, err});
-        })
-        .screenshots({ //
+        .screenshots({
             // Will take screens at 20%, 40%, 60% and 80% of the video
-            count: 3, //찍을 썸네일 갯수
-            folder: 'uploads/thumbnails', //썸네일 저장위치
-            size:'320x240', //썸네일 사이즈
+            count: 3,
+            folder: 'uploads/thumbnails',
+            size:'320x240',
             // %b input basename ( filename w/o extension )
             filename:'thumbnail-%b.png'
         });
+
 });
+     
 
 module.exports = router;

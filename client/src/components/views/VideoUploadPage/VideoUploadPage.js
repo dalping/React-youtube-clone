@@ -44,7 +44,7 @@ function VideoUploadPage() {
 
     function onDrop(files){ 
         let formData = new FormData;
-        const config={
+        const config={ //에러 방지 
             header:{'content-type' : 'multipart/form-data'}
         }
             formData.append("file", files[0])
@@ -52,14 +52,19 @@ function VideoUploadPage() {
             axios.post('/api/video/uploadfiles', formData, config) //서버에 리퀘스트 보내기
             .then(response => {
                 if(response.data.success){ //동영상 업로드 성공!
-                    // console.log(response.data)
-                    //썸네일 생성
+                    console.log(response.data)
+
                     let variable = {
-                        url:response.data.url,
+                        filePath: response.data.filePath,
                         fileName: response.data.fileName
                     }
 
-                    axios.post('/api/video/thumbnail', variable) // 썸네일 리퀘스트 보내기
+                    //setFilePath(response.data.filePath)
+
+                    console.log('hello world!');
+
+                    //썸네일 생성 //err..
+                    axios.post('/api/video/thumbnail', variable)
                     .then(response => {
                         if(response.data.success){
                         }else{
