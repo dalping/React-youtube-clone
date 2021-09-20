@@ -40,8 +40,6 @@ router.post("/uploadfiles", (req, res) => {
 
 router.post("/thumbnail", (req, res) => {
     
-    console.log('왜11 안돼 500에러가 뭔데 나한테 이렇게 스트레스를 줘');
-    
     let thumbsFilePath ="";
     let fileDuration ="";
 
