@@ -2,37 +2,38 @@ import React,{useEffect,useState} from 'react'
 import {Row, Col, List, Avatar} from 'antd'
 import Axios from 'axios'
 import SideVideo from './SideVideo'
+import Subscribe from './Subscribe'
 
 function VideoDetailPage(props) {
 
     const videoId = props.match.params.videoId
     const variable = { videoId : videoId}
-    const [VideoDetail, setVideoDetail] = useState([])
+    const [Video, setVideo] = useState([])
 
     useEffect(() => {
-        Axios.post('/api/video/getVideoDetail',variable)
+        Axios.post('/api/video/getVideoDetail', variable)
         .then(res => {
             if(res.data.success){
-                setVideoDetail(res.data.videoDetail)
+                setVideo(res.data.videoDetail)
             }else{
                 alert('fail')
             }
         })
     }, [])
 
-    if(VideoDetail.writer){
+    if(Video.writer){
     return (
         <Row gutter={[16,16]}>
             <Col lg={18} xs={24}>
             <div style={{width:'100%', padding:'3rem 4rem'}}>
-                <video style={{width:'100%'}} src={`http://localhost:5000/${VideoDetail.filePath}`} controls/>
+                <video style={{width:'100%'}} src={`http://localhost:5000/${Video.filePath}`} controls/>
                 <List.Item
-                    actions
+                    actions={[<Subscribe userTo={Video.writer} userFrom={localStorage.getItem('userId')}/>]}
                 >
                     <List.Item.Meta
-                        avatar={<Avatar src={VideoDetail.writer.image}/>}
-                        title = {VideoDetail.writer.name}
-                        description = {VideoDetail.description}
+                        avatar={<Avatar src={Video.writer.image}/>}
+                        title = {Video.writer.name}
+                        description = {Video.description}
                         />
 
                 </List.Item>

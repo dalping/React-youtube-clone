@@ -3,8 +3,6 @@
 
 dev.js
 
-
-
 .DS_Store
 
 npm-debug.log*
@@ -12,7 +10,4 @@ yarn-debug.kog*
 yarn-error.log*
 
 .vscode
-*.mp4
-*.mp4
-*.mp4
-*.mp4
+/uploads
