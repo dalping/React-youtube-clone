@@ -1,6 +1,7 @@
 import React,{useState} from 'react'
 import {Typography, Button, Form, message, Input, Icon} from 'antd';
 import DropZone from 'react-dropzone';
+import { useSelector } from 'react-redux';
 
 import axios from 'axios';
 
@@ -19,8 +20,9 @@ const CategoryOption = [
     {value:3, label:"Pets & Animals"}
 ]
 
-function VideoUploadPage() {
+function VideoUploadPage(props) {
 
+    const user = useSelector(state => state.user)
     const [VideoTitle, setVideoTitle] = useState('')
     const [Description, setDescription] = useState('')
     const [Private, setPrivate] = useState(0)
@@ -43,6 +45,33 @@ function VideoUploadPage() {
 
     function onCategoryChange(e){
         setCategory(e.currentTarget.value);
+    }
+
+    function onSubmitVideo(e){
+        e.preventDefault();
+
+        const variables = {
+            writer:user.userData._id,
+            title:VideoTitle,
+            description:Description,
+            privacy:Private,
+            filePath:FilePath,
+            category:Category,
+            duration:Duration,
+            thumbnail:ThumnailPath
+        }
+
+        axios.post('/api/video/uploadVideo', variables)
+        .then(res =>{
+            if(res.data.success){
+                message.success('성공적으로 업로드 했습니다.')
+                setTimeout(()=>{
+                    props.history.push('/')
+                }, 3000)
+            }else{
+                alert('fail upload video')
+            }
+        })
     }
 
     function onDrop(files){ 
@@ -94,7 +123,7 @@ function VideoUploadPage() {
             </div>
             <div>
 
-            <Form onSubmit>
+            <Form onSubmit={onSubmitVideo}>
                     <div style={{display:'flex', justifyContent:'space-between'}}>
                         <DropZone
                         onDrop = {onDrop}
@@ -149,7 +178,7 @@ function VideoUploadPage() {
                     </select>
                     <br/>
                     <br/>
-                    <Button type="primary" size="large" onClick>
+                    <Button type="primary" size="large" onClick={onSubmitVideo}>
                         Submit
                     </Button>
 
