@@ -51,5 +51,4 @@ router.post("/subscribe", (req, res) => {
     })
 });
 
-
 module.exports = router;

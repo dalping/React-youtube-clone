@@ -30,7 +30,6 @@ function Subscribe(props) {
         .then(res =>{
             if(res.data.success){
                 setSubscribed(res.data.subscribed)
-                console.log(Subscribed)
             }else{
                 alert('구독 여부를 받아오지 못했습니다.')
             }
