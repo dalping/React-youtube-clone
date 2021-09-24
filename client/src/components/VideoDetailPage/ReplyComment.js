@@ -17,28 +17,25 @@ function ReplyComment(props) {
         setChildCommentNumber(commentNumber)
     }, [])
 
-    // useEffect(() => {
-    //     console.log('change!')
-    // }, [OpenReplyComments])
+    useEffect(() => {
+        console.log('change!')
+    }, [OpenReplyComments])
 
     const renderReplyComment = (parentCommentId) => {
-        console.log(parentCommentId)
-        
-        props.commentLists.map((comment, idx)=>(
-            <p>hello</p>
-        ))
 
-        // props.commentLists.map((comment, idx) => (
-        //     <React.Fragment>
-        //         {
-        //            comment.responseTo === parentCommentId &&
-        //             <div key={idx} style={{width:'80%', marginLeft:'40px'}} >
-        //                 <SingleComment refreshFunction={props.refreshFunction} comment={comment} postId={props.postId}/>
-        //                 <ReplyComment commentList={props.commentLists} postId={props.postId} parentCommentId={comment._id}/>
-        //             </div>
-        //         }
-        //     </React.Fragment>
-        // ))
+        return(
+            <React.Fragment>{
+            props.commentLists.map((comment,idx) => {
+                if(comment.responseTo === parentCommentId) 
+                return (
+                    <div key={idx} style={{width:'80%', marginLeft:'40px'}} >
+                        <SingleComment refreshFunction={props.refreshFunction} comment={comment} postId={props.postId}/>
+                        {/* <ReplyComment commentList={props.commentLists} postId={props.postId} parentCommentId={comment._id}/> */}
+                    </div>
+                )
+            })
+            }</React.Fragment>
+        )
     }
 
     const onHandleChange = () => {
@@ -52,7 +49,8 @@ function ReplyComment(props) {
                 View {ChildCommentNumber} more comment(s)
             </p>
         }
-        {OpenReplyComments && 
+        {
+        OpenReplyComments && 
             renderReplyComment(props.parentCommentId)
         }
         </div>

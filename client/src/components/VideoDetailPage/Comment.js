@@ -40,7 +40,7 @@ function Comment(props) {
             <hr/>
             {props.commentLists && props.commentLists.map((comment, idx)=>(
                 (!comment.responseTo && //대댓글이 아닌 경우만 출력
-                    <React.Fragment>
+                    <React.Fragment key={idx}>
                         <SingleComment refreshFunction={props.refreshFunction} comment={comment} postId={props.postId}/>
                         <ReplyComment parentCommentId={comment._id} postId={props.postId} commentLists={props.commentLists}/>
                     </React.Fragment>
