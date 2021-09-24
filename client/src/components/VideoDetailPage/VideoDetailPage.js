@@ -35,7 +35,7 @@ function VideoDetailPage(props) {
 
     }, [])
 
-    const refreshFunction = (newComment) => {
+    const refreshFunction = (newComment) => { //onSubmit으로 도착한 댓글 추가
         setComments(Comments.concat(newComment))
     }
 

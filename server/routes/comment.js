@@ -12,7 +12,7 @@ router.post("/saveComment", (req, res) => {
 
     comment.save((err, comment) =>{
         if(err) return res.json({success:false, err})
-        
+
         //save에서는 바로 populate으로 유저 정보를 가져올 수 없다.
         Comment.find({'_id':comment._id})
         .populate('writer')
