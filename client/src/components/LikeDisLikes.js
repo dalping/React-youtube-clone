@@ -2,7 +2,6 @@ import React,{useState, useEffect} from 'react'
 import {Tooltip, Icon} from 'antd';
 import Axios from 'axios';
 
-
 function LikeDisLikes(props) {
 
     const [Likes, setLikes] = useState(0)
@@ -50,11 +49,69 @@ function LikeDisLikes(props) {
         })
     }, [])
 
+    const onLike = () => {
+        if(LikeAction === null){
+            Axios.post('/api/like/upLike', variable)
+            .then(res => {
+                if(res.data.success){
+                    setLikes(Likes + 1)
+                    setLikeAction('liked')
+
+                    if(DislikeAction !== null){ //이미 싫어요가 눌러져 있었다면
+                        setDislikeAction(null)
+                        setDislikes(Dislikes - 1)
+                    }
+                }else{
+                    alert('fail to up Like')
+                }
+            })
+        } else { //이미 클릭이 되어 있다면 좋아요를 취소
+            Axios.post('/api/like/unLike', variable)
+            .then(res => {
+                if(res.data.success){
+                    setLikeAction(Likes - 1)
+                    setLikeAction(null)
+                }else{
+                    alert('라이크를 내리지 못하였습니다.')
+                }
+            })
+        }
+    }
+
+    const onDislike = () => {
+        if(DislikeAction === null){
+            Axios.post('/api/like/upDislike', variable)
+            .then(res => {
+                if(res.data.success){
+                    setDislikes(Dislikes + 1)
+                    setDislikeAction('disliked')
+
+                    if(LikeAction !== null){ //이미 싫어요가 눌러져 있었다면
+                        setLikeAction(null)
+                        setLikes(Likes - 1)
+                    }
+                }else{
+                    alert('fail to up Like')
+                }
+            })
+        } else { //이미 클릭이 되어 있다면 좋아요를 취소
+            Axios.post('/api/like/unDislike', variable)
+            .then(res => {
+                if(res.data.success){
+                    setDislikeAction(Dislikes - 1)
+                    setDislikeAction(null)
+                }else{
+                    alert('디스라이크를 내리지 못하였습니다.')
+                }
+            })
+        }
+    }
+
     return (
         <div>
             <span key="comment-basic-like">
                 <Tooltip title="Like">
-                    <Icon type="like" theme={LikeAction==='liked'?"filled":"outlined"} onClick
+                    <Icon type="like" theme={LikeAction==='liked'?"filled":"outlined"} onClick ={onLike}
                     />
                 </Tooltip>
                 <span style={{paddingLeft:'8px', cursor:'auto'}}>{Likes}</span>
@@ -62,7 +119,7 @@ function LikeDisLikes(props) {
 
             <span key="comment-basic-dislike">
                 <Tooltip title="dislike">
-                    <Icon type="dislike" ttheme={DislikeAction==='disliked'?"filled":"outlined"} onClick
+                    <Icon type="dislike" ttheme={DislikeAction==='disliked'?"filled":"outlined"} onClick={onDislike}
                     />
                 </Tooltip>
                 <span style={{paddingLeft:'8px', cursor:'auto'}}>{Dislikes}</span>
